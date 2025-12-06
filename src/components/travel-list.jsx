@@ -6,6 +6,8 @@ function TravelList(){
 
   const [ travels, setTravels ] = useState(data);
   const [ favorites, setFavorites ] = useState([]);
+  const colors = ["purple", "blue", "green", "yellow", "orange", "red"];
+  const [color, setColor] = useState("purple");
 
 
   function deletePlan(id){
@@ -13,12 +15,11 @@ function TravelList(){
     setTravels(newPlans);
   }
 
-  function toFavs() {
-    const favs = travels.filter((plan) => plan.favorite === true)
-    .map((plan) => {
-      deletePlan(plan.id);
-      return (
-        <div key={plan.id} className="d-flex flex-column border rounded-2 m-2">
+  function toFavs(id) {
+    const favs = travels
+    .filter((plan) => plan.id === id)
+    .map((plan) =>{
+      return (<div className="d-flex flex-column border rounded-2 m-2">
           <div>
             <img src={plan.image} alt={plan.destination} />
           </div>
@@ -28,16 +29,20 @@ function TravelList(){
               <strong>Price:</strong> {plan.totalCost}€ <br />
             </p>
           </div>
-        </div>
-      );
-    });
-    setFavorites([favs, ...favorites]);
+        </div>);});
+    deletePlan(id);
+    setFavorites([favs,...favorites]);
+  }
+
+  function changeColor() {
+    const random = Math.floor(Math.random() * colors.length);
+    const newColor = colors[random];
+    setColor(newColor);
   }
 
 
   const cards = travels.map((plan) => {
-    plan.favorite = false;
-    return <TravelPlanCard plan={{p: plan, del: deletePlan, fav: toFavs}} />;
+    return <TravelPlanCard plan={{p: plan, del: deletePlan, fav: toFavs, col: color, chanCol: changeColor}} />;
   });
 
   return (

@@ -1,5 +1,5 @@
 function TravelPlanCard({ plan }) {
-  const { p, del, fav} = plan;
+  const { p, del, fav, col, chanCol} = plan;
   return (
     <div className="d-flex border rounded-2 m-2 p-2">
       <div className="p-2">
@@ -15,11 +15,8 @@ function TravelPlanCard({ plan }) {
           {(p.allInclusive)?<label>All-Inclusive</label>:null}
         </p>
         <div className="d-flex align-items-center justify-content-between">
-          <button onClick={() => del(p.id)} className="btn bg-secondary text-white" type="button">Delete</button>
-          <button onClick={() => {
-            p.favorite = true;
-            fav();
-          }} className="btn bg-secondary text-white" type="button">♡</button>
+          <button onClick={() => del(p.id)} className="btn text-white" type="button" style={{backgroundColor: col}}>Delete</button>
+          <button onClick={() => {fav(p.id); chanCol()}} className="btn bg-secondary text-white" type="button">♡</button>
         </div>
       </div>
     </div>
