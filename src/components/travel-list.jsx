@@ -1,0 +1,56 @@
+import data from "../assets/travel-plans.json";
+import { useState } from "react";
+import TravelPlanCard from "./travelplan-card";
+
+function TravelList(){
+
+  const [ travels, setTravels ] = useState(data);
+  const [ favorites, setFavorites ] = useState([]);
+
+
+  function deletePlan(id){
+    const newPlans = travels.filter((plan) => plan.id !== id);
+    setTravels(newPlans);
+  }
+
+  function toFavs() {
+    const favs = travels.filter((plan) => plan.favorite === true)
+    .map((plan) => {
+      deletePlan(plan.id);
+      return (
+        <div key={plan.id} className="d-flex flex-column border rounded-2 m-2">
+          <div>
+            <img src={plan.image} alt={plan.destination} />
+          </div>
+          <div>
+            <p>
+              <strong>{`${plan.destination} (${plan.days} Days)`}</strong> <br />
+              <strong>Price:</strong> {plan.totalCost}€ <br />
+            </p>
+          </div>
+        </div>
+      );
+    });
+    setFavorites([favs, ...favorites]);
+  }
+
+
+  const cards = travels.map((plan) => {
+    plan.favorite = false;
+    return <TravelPlanCard plan={{p: plan, del: deletePlan, fav: toFavs}} />;
+  });
+
+  return (
+    <>
+      <div className="TravelList d-flex flex-column align-items-center">
+        {cards}
+      </div>
+      <div className="favorites d-flex flex-column align-items-center border rounded m-2 p-2">
+        <h4>Favorites</h4>
+        {favorites}
+      </div>
+    </>
+  );
+}
+
+export default TravelList;
